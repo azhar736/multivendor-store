@@ -1,6 +1,6 @@
 const express = require("express");
 const connectDB = require("./db/database");
-const ErrorHandler = require("./utils/ErrorHandler");
+const ErrorHandler = require("./middleware/error");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const app = express();

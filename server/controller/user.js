@@ -22,8 +22,6 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
         if (err) {
           console.log(err);
           res.status(500).json({ message: "Error deleting the file" });
-        } else {
-          res.json({ message: "Successfully deleted the file" });
         }
       });
       return next(new ErrorHandler("User already exists", 400));
@@ -49,9 +47,11 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
         message: `Please check your email:- ${user.email} to activate your account.`,
       });
     } catch (error) {
+      console.log("The Error from Internal Try-Catch", error);
       return next(new ErrorHandler(error.message, 500));
     }
   } catch (error) {
+    console.log("The Error from External Try-Catch", error);
     return next(new ErrorHandler(error.message, 400));
   }
 });
@@ -68,23 +68,29 @@ router.post(
   "/activation",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { activation_toke } = req.body;
+      const { activation_token } = req.body;
       const newUser = jwt.verify(
-        activation_toke,
+        activation_token,
         process.env.ACTIVATION_SECRET
       );
       if (!newUser) {
         return next(new ErrorHandler("Invalid Token", 400));
       }
       const { name, email, password, avatar } = newUser;
-      await User.create({
+      let user = await User.findOne({ email });
+      if (user) {
+        return next(new ErrorHandler("User already exists!", 400));
+      }
+      user = await User.create({
         name,
         email,
         password,
         avatar,
       });
-      sendToken(newUser, 201, res);
-    } catch (error) {}
+      sendToken(user, 201, res);
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
   })
 );
 

@@ -6,6 +6,7 @@ import { RxAvatar } from "react-icons/rx";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import useMakeToast from "../../hooks/Toast";
 const Base_URL = process.env.NEXT_PUBLIC_API_URL;
 function SignUp() {
   const [name, setName] = useState("");
@@ -14,7 +15,7 @@ function SignUp() {
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const router = useRouter();
-
+  const makeToast = useMakeToast();
   const handleInputFileChange = (e) => {
     const file = e.target.files[0];
     console.log("The Selected File is ::", file);
@@ -23,8 +24,7 @@ function SignUp() {
 
   const hanleSubmit = (e) => {
     e.preventDefault();
-    // console.log("submit..");
-    // console.log("Hello", process.env.NEXT_PUBLIC_API_KEY);
+    console.log("Hello", process.env.NEXT_PUBLIC_API_KEY);
     const config = { headers: { "Content-Type": "multipart/form-data" } };
     const newForm = new FormData();
     newForm.append("file", avatar);
@@ -33,17 +33,17 @@ function SignUp() {
     newForm.append("password", password);
     console.log("The Base URL is >>>", Base_URL);
     axios
-      .post(`${Base_URL}/create-user`, newForm, config)
+      .post(`${Base_URL}/user/create-user`, newForm, config)
       .then((res) => {
         console.log(res);
-        alert(res.message);
         // if (res.data.success == true) {
         //   router.push("/");
         //   // <Link href="/" />;
         // }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data.message);
+        makeToast(err.response.data.message, "error");
       });
   };
   useEffect(() => {
