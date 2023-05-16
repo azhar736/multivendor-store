@@ -36,10 +36,15 @@ function SignUp() {
       .post(`${Base_URL}/user/create-user`, newForm, config)
       .then((res) => {
         console.log(res);
-        // if (res.data.success == true) {
-        //   router.push("/");
-        //   // <Link href="/" />;
-        // }
+        if (res.data.success == true) {
+          makeToast(res.data.message, "success");
+          setName("");
+          setEmail("");
+          setPassword("");
+          setAvatar();
+          //router.push("/");
+          // <Link href="/" />;
+        }
       })
       .catch((err) => {
         console.log(err.response.data.message);

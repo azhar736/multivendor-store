@@ -7,8 +7,9 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const ErrorHandler = require("../utils/ErrorHandler");
 const sendMail = require("../utils/sendMail");
-const catchAsyncErrors = require("../middleware/catchAsyncError");
 const sendToken = require("../utils/jwtToken");
+const catchAsyncError = require("../middleware/catchAsyncError");
+const { isAuthenticated } = require("../middleware/auth");
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
@@ -66,7 +67,7 @@ const createActivationToken = (user) => {
 //activate user
 router.post(
   "/activation",
-  catchAsyncErrors(async (req, res, next) => {
+  catchAsyncError(async (req, res, next) => {
     try {
       const { activation_token } = req.body;
       const newUser = jwt.verify(
@@ -94,4 +95,48 @@ router.post(
   })
 );
 
+//Login User
+router.post(
+  "/login-user",
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
+      // console.log(email, password);
+      if (!email || !password) {
+        return next(new ErrorHandler("Please Provide all the fields!", 400));
+      }
+      const user = await User.findOne({ email }).select("+password");
+      if (!user) {
+        return next(new ErrorHandler("User not found!", 400));
+      }
+      const isValidPassword = await user.comparePassword(password);
+      if (!isValidPassword) {
+        return next(
+          new ErrorHandler("Please provide a valid information!", 400)
+        );
+      }
+      sendToken(user, 201, res);
+    } catch (error) {
+      console.log(error);
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+//Load User
+router.get(
+  "/getuser",
+  isAuthenticated,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.user.id);
+      if (!user) {
+        return next(new ErrorHandler("User not found!", 400));
+      }
+      res.status(200).json({ success: true, user });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
 module.exports = router;

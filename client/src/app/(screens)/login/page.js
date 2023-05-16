@@ -3,14 +3,44 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/style";
 import Link from "next/link";
+import axios from "axios";
+import useMakeToast from "../../hooks/Toast";
+const Base_URL = process.env.NEXT_PUBLIC_API_URL;
+import { useRouter } from "next/navigation";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
-
+  const makeToast = useMakeToast();
+  const router = useRouter();
   useEffect(() => {
     setVisible(false); // ensure initial client-side state matches server-side state
   }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(email, password);
+    await axios
+      .post(
+        `${Base_URL}/user/login-user`,
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        console.log(res);
+        makeToast("Login successful!", "success");
+        router.push("/");
+        setEmail("");
+        setPassword("");
+      })
+      .catch((err) => {
+        console.log("The Error", err);
+        makeToast(err.response.data.message, "error");
+      });
+  };
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -20,7 +50,7 @@ function Login() {
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="email"
