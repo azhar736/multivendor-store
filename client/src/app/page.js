@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loadUser } from "./redux/actions/user";
+import Header from "./components/Header";
 export default function Home() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -10,9 +11,7 @@ export default function Home() {
 
   return (
     <>
-      <div>
-        <h1 className="text-red-500 text-3xl font-bold">Hello world</h1>
-      </div>
+      <Header />
     </>
   );
 }
