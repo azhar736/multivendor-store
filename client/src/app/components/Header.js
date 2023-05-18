@@ -8,7 +8,10 @@ import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { BsFilterLeft } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
 import DropDown from "./Header/DropDown";
-function Header() {
+import Navbar from "./Header/Navbar";
+import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
+import { CgProfile } from "react-icons/cg";
+function Header({ activeHeading }) {
   const [searchTerm, setSearchTem] = useState("");
   const [searchData, setSearchData] = useState(null);
   const [isActive, setIsActive] = useState(false);
@@ -28,15 +31,10 @@ function Header() {
     if (typeof window !== "undefined") {
       window.addEventListener("scroll", handleScroll);
     }
-    return () => {
-      if (typeof window !== "undefined") {
-        window.removeEventListener("scroll", handleScroll);
-      }
-    };
   }, []);
   const handleScroll = () => {
     if (typeof window !== "undefined") {
-      if (window.screenY > 70) {
+      if (window.scrollY > 70) {
         setIsActive(true);
       } else {
         setIsActive(false);
@@ -109,24 +107,52 @@ function Header() {
           className={`${styles.section} relative ${styles.noramlFlex} justify-between`}
         >
           {/*Categories*/}
-          <div>
+          <div onClick={() => setDropDown(!dropDown)}>
             <div className="relative h-[60px] w-[270px] mt-[10px] hidden 1000px:block">
               <BsFilterLeft size={30} className="absolute top-3 left-2" />
-              <button className="h-[100%] w-full flex justify-between items-center pl-20 bg-white font-Poppins text-lg font-[500] select-none rounded-t-md">
+              <button className="h-[100%] w-full flex justify-between items-center pl-10 bg-white font-Poppins text-lg font-[500] select-none rounded-t-md">
                 All Categories
-                <IoIosArrowDown
-                  size={20}
-                  className="absolute right-2 top-4 cursor-pointer"
-                  onClick={() => setDropDown(!dropDown)}
-                />
-                {dropDown ? (
-                  <DropDown
-                    categoriesData={categoriesData}
-                    setDropDown={setDropDown}
-                  />
-                ) : null}
-                {/* nav items */}
               </button>
+              <IoIosArrowDown
+                size={20}
+                className="absolute right-2 top-4 cursor-pointer"
+                onClick={() => setDropDown(!dropDown)}
+              />
+              {dropDown ? (
+                <DropDown
+                  categoriesData={categoriesData}
+                  setDropDown={setDropDown}
+                />
+              ) : null}
+            </div>
+          </div>
+          {/* nav items */}
+          <div className={`${styles.noramlFlex}`}>
+            <Navbar active={activeHeading} />
+          </div>
+          <div className="flex">
+            <div className={`${styles.noramlFlex}`}>
+              <div className="relative cursor-pointer mr-[15px]">
+                <AiOutlineHeart size={30} color="rgba(255,255,255)" />
+                <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white text-[12px] leading-tight text-center">
+                  0
+                </span>
+              </div>
+            </div>
+            <div className={`${styles.noramlFlex}`}>
+              <div className="relative cursor-pointer mr-[15px]">
+                <AiOutlineShoppingCart size={30} color="rgba(255,255,255)" />
+                <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white text-[12px] leading-tight text-center">
+                  1
+                </span>
+              </div>
+            </div>
+            <div className={`${styles.noramlFlex}`}>
+              <div className="relative cursor-pointer mr-[15px]">
+                <Link href="/login">
+                  <CgProfile size={30} color="rgba(255,255,255)" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>

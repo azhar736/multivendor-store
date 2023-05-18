@@ -9,13 +9,13 @@ function DropDown({ categoriesData, setDropDown }) {
     window.location.reload();
   };
   return (
-    <div className="pb-4 w-[270px] bg-[#fff] absolute z-30 rounded-b-md shadow-sm">
+    <div className="pb-4 w-[270px] bg-[#fff] absolute top-16 left-0 z-30 rounded-b-md shadow-sm">
       {categoriesData &&
         categoriesData.map((item, index) => (
           <div
             key={index}
             className={`${styles.noramlFlex}`}
-            onClick={handleSubmit(item)}
+            onClick={() => handleSubmit(item)}
           >
             <img
               src={item.image_Url}
