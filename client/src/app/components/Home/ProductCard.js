@@ -2,7 +2,8 @@
 import styles from "@/app/styles/style";
 import Link from "next/link";
 import { useState } from "react";
-import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { AiFillHeart, AiFillStar, AiOutlineEye, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineStar } from "react-icons/ai";
+import ProductDetailsCard from "./ProductDetailsCard";
 const ProductCard = ({ data }) => {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
@@ -66,8 +67,46 @@ const ProductCard = ({ data }) => {
             {data.total_sell} sold
           </span>
         </div>
+        </Link>
         {/*Side Options*/}
-      </Link>
+        <div>
+          {click ?(
+            <AiFillHeart 
+            size={22}
+            className="cursor-pointer absolute right-2 top-5"
+            onClick={()=>setClick(!click)}
+            color={click?"red":"#333"}
+            title="Remove from Wishlist"
+            />
+          ):(
+            <AiOutlineHeart 
+            size={22}
+            className="cursor-pointer absolute right-3 top-5"
+            onClick={()=>setClick(!click)}
+            color={click?"red":"#333"}
+            title="Add to Wishlist"
+            />
+          )}
+          <AiOutlineEye 
+            size={22}
+            className="cursor-pointer absolute right-3 top-14"
+            onClick={()=>setOpen(!open)}
+            color="#333"
+            title="Quick Look"
+            />
+            <AiOutlineShoppingCart
+             size={22}
+             className="cursor-pointer absolute right-3 top-24"
+             onClick={()=>setOpen(!open)}
+             color="#444"
+             title="Add to Cart"
+            />
+            {
+              open ?(
+                <ProductDetailsCard setOpen={setOpen} data={data} />
+              ):null
+            }
+        </div>
     </div>
   );
 };

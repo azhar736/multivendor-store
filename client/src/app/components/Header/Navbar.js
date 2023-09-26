@@ -9,7 +9,9 @@ function Navbar({ active }) {
     <div className={`${styles.noramlFlex}`}>
       {navItems &&
         navItems.map((item, index) => (
-          <div className="flex">
+          <div
+          key={index} 
+          className="flex">
             <Link
               href={item.url}
               className={`${
