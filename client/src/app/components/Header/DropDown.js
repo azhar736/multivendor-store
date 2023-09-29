@@ -6,7 +6,7 @@ function DropDown({ categoriesData, setDropDown }) {
   const handleSubmit = (i) => {
     router.push(`/products?categories=${i.title}`);
     setDropDown(false);
-    window.location.reload();
+    // window.location.reload();
   };
   return (
     <div className="pb-4 w-[270px] bg-[#fff] absolute top-16 left-0 z-30 rounded-b-md shadow-sm">

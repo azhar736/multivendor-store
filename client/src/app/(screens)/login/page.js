@@ -35,6 +35,7 @@ function Login() {
         router.push("/");
         setEmail("");
         setPassword("");
+        // window.location.reload();
       })
       .catch((err) => {
         console.log("The Error", err);
