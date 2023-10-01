@@ -12,13 +12,16 @@ import Navbar from "./Header/Navbar";
 import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
 import { useSelector } from "react-redux";
+import Cart from "./Header/Cart";
 const Backend_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 function Header({ activeHeading }) {
-  const {isAuthenticated,user, loading} = useSelector((state)=>state.user);
+  const { isAuthenticated, user, loading } = useSelector((state) => state.user);
   const [searchTerm, setSearchTem] = useState("");
   const [searchData, setSearchData] = useState(null);
   const [isActive, setIsActive] = useState(false);
   const [dropDown, setDropDown] = useState(false);
+  const [openCart, setOpenCart] = useState(false);
+  const [wishList, setWishList] = useState(false);
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTem(term);
@@ -45,7 +48,7 @@ function Header({ activeHeading }) {
     }
   };
 
-  console.log("user",user);
+  console.log("user", user);
   return (
     <>
       <div className={`${styles.section}`}>
@@ -118,21 +121,19 @@ function Header({ activeHeading }) {
               <button className="h-[100%] w-full flex justify-between items-center pl-10 bg-white font-Poppins text-lg font-[500] select-none rounded-t-md">
                 All Categories
               </button>
-              {
-                dropDown ? (
-                  <IoIosArrowUp
-                  size={20}
-                  className="absolute right-2 top-4 cursor-pointer"
-                  onClick={() => setDropDown(!dropDown)}
-                  />
-                ) :(
-                  <IoIosArrowDown
+              {dropDown ? (
+                <IoIosArrowUp
                   size={20}
                   className="absolute right-2 top-4 cursor-pointer"
                   onClick={() => setDropDown(!dropDown)}
                 />
-                )
-              }
+              ) : (
+                <IoIosArrowDown
+                  size={20}
+                  className="absolute right-2 top-4 cursor-pointer"
+                  onClick={() => setDropDown(!dropDown)}
+                />
+              )}
               {dropDown ? (
                 <DropDown
                   categoriesData={categoriesData}
@@ -156,7 +157,9 @@ function Header({ activeHeading }) {
             </div>
             <div className={`${styles.noramlFlex}`}>
               <div className="relative cursor-pointer mr-[15px]">
-                <AiOutlineShoppingCart size={30} color="rgba(255,255,255)" />
+                <AiOutlineShoppingCart size={30} color="rgba(255,255,255)"
+                onClick={()=>setOpenCart(true)}
+                />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white text-[12px] leading-tight text-center">
                   1
                 </span>
@@ -164,18 +167,24 @@ function Header({ activeHeading }) {
             </div>
             <div className={`${styles.noramlFlex}`}>
               <div className="relative cursor-pointer mr-[15px]">
-                {
-                  isAuthenticated ? (
-                    <Link href="/profile">
-                      <img src={`${Backend_URL}/${user.avatar}`} alt="avatar" className="h-[40px] w-[40px] rounded-full" />
-                    </Link>
-                  ):(
-                    <Link href="/login">
+                {isAuthenticated ? (
+                  <Link href="/profile">
+                    <img
+                      src={`${Backend_URL}${user.avatar}`}
+                      alt="avatar"
+                      className="h-[40px] w-[40px] rounded-full"
+                    />
+                  </Link>
+                ) : (
+                  <Link href="/login">
                     <CgProfile size={30} color="rgba(255,255,255)" />
                   </Link>
-                  )
-                }
+                )}
               </div>
+            </div>
+            <div>
+              {/* Card POP_UP */}
+              {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
             </div>
           </div>
         </div>

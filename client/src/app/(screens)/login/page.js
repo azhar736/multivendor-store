@@ -5,16 +5,29 @@ import styles from "../../styles/style";
 import Link from "next/link";
 import axios from "axios";
 import useMakeToast from "../../hooks/Toast";
+import { useDispatch } from 'react-redux';
 const Base_URL = process.env.NEXT_PUBLIC_API_URL;
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { loadUser } from "../../redux/actions/user";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
   const makeToast = useMakeToast();
+  const dispatch = useDispatch();
   const router = useRouter();
+    const {isAuthenticated} = useSelector((state)=>state.user);
+    const loading = useSelector((state) => state.user.loading);
   useEffect(() => {
     setVisible(false); // ensure initial client-side state matches server-side state
+    console.log("The value is Authenticated is on Login Page",isAuthenticated);
+    if(isAuthenticated === true){
+      router.replace("/");
+    }else{
+      setShouldRender(true);
+    }
   }, []);
 
   const handleSubmit = async (e) => {
@@ -31,17 +44,21 @@ function Login() {
       )
       .then((res) => {
         console.log(res);
-        makeToast("Login successful!", "success");
         router.push("/");
+        makeToast("Login successful!", "success");
+        dispatch(loadUser());
         setEmail("");
         setPassword("");
-        // window.location.reload();
+        // window.location.reload(true);
       })
       .catch((err) => {
         console.log("The Error", err);
         makeToast(err.response.data.message, "error");
       });
   };
+  console.log("Loader User State===",loading);
+  if(loading) return <>Loading</>;
+  if (!shouldRender) return null;
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">

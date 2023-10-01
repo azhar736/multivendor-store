@@ -14,6 +14,7 @@ export const loadUser = () => async (dispatch) => {
     const { data } = await axios.get(`${Base_URL}/user/getuser`, {
       withCredentials: true,
     });
+    console.log('loadUser action: data received', data);
     dispatch(loadUserSuccess(data.user));
   } catch (error) {
     // console.log("The Error in redux catch:", error.response.data);

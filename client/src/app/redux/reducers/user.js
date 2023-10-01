@@ -15,6 +15,7 @@ export const userReducer = createReducer(initialState, {
     state.loading = true;
   },
   [loadUserSuccess]: (state, action) => {
+    console.log('userReducer: loadUserSuccess action received', action);
     state.isAuthenticated = true;
     state.loading = false;
     state.user = action.payload;
