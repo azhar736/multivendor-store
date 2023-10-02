@@ -13,6 +13,7 @@ import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
 import { useSelector } from "react-redux";
 import Cart from "./Header/Cart";
+import WishList from "./Header/WishList";
 const Backend_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 function Header({ activeHeading }) {
   const { isAuthenticated, user, loading } = useSelector((state) => state.user);
@@ -148,7 +149,9 @@ function Header({ activeHeading }) {
           </div>
           <div className="flex">
             <div className={`${styles.noramlFlex}`}>
-              <div className="relative cursor-pointer mr-[15px]">
+              <div className="relative cursor-pointer mr-[15px]"
+              onClick={()=>setWishList(true)}
+              >
                 <AiOutlineHeart size={30} color="rgba(255,255,255)" />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white text-[12px] leading-tight text-center">
                   0
@@ -183,8 +186,10 @@ function Header({ activeHeading }) {
               </div>
             </div>
             <div>
-              {/* Card POP_UP */}
+              {/* Card POP UP */}
               {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
+                 {/* WishList POP UP */}
+              {wishList ? <WishList setWishList={setWishList} /> : null}
             </div>
           </div>
         </div>
