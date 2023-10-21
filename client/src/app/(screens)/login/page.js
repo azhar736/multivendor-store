@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/style";
 import Link from "next/link";
@@ -20,7 +20,7 @@ function Login() {
   const router = useRouter();
     const {isAuthenticated} = useSelector((state)=>state.user);
     const loading = useSelector((state) => state.user.loading);
-  useEffect(() => {
+  useLayoutEffect(() => {
     setVisible(false); // ensure initial client-side state matches server-side state
     console.log("The value is Authenticated is on Login Page",isAuthenticated);
     if(isAuthenticated === true){

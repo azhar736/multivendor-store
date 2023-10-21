@@ -1,3 +1,5 @@
+import { loadUser } from "@/app/redux/actions/user";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { AiOutlineCreditCard, AiOutlineLogout, AiOutlineMessage } from "react-icons/ai";
@@ -5,14 +7,27 @@ import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
 import { MdOutlineTrackChanges } from "react-icons/md";
 import { RxPerson } from "react-icons/rx";
 import { TbAddressBook } from "react-icons/tb";
-
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+const Base_URL = process.env.NEXT_PUBLIC_API_URL;
 function ProfileSidebar({ active, setActive }) {
   const router = useRouter();
-
+  const dispatch = useDispatch();
   const handleInbox = () => {
     setActive(4);
     router.push("/inbox");
   };
+
+  const handleLogout=()=>{
+    axios.get(`${Base_URL}/user/logout`,{withCredentials:true}).then((res)=>{
+     toast.success(res?.data?.message);
+     router.replace("/login");
+     dispatch(loadUser());
+    //  window.location.reload(true);
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
   return (
     <div className="w-full bg-white shadow-sm rounded-[10px] p-4 pt-8">
       <div
@@ -38,7 +53,7 @@ function ProfileSidebar({ active, setActive }) {
             active === 2 ? "text-[red] font-Poppins font-medium" : " "
           }`}
         >
-          Profile
+          Orders
         </span>
       </div>
       <div
@@ -108,7 +123,7 @@ function ProfileSidebar({ active, setActive }) {
       </div>
       <div
         className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(8)}
+        onClick={() => setActive(8) || handleLogout()}
       >
         <AiOutlineLogout size={20} color={active === 8 ? "red" : ""} />
         <span

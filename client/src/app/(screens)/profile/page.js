@@ -4,7 +4,7 @@ import ProfileContent from '@/app/components/Profile/ProfileContent'
 import ProfileSidebar from '@/app/components/Profile/ProfileSidebar'
 import styles from '@/app/styles/style'
 import React, { useState } from 'react'
-
+import isAuth from '@/app/components/Auth/isAuth';
 function ProfilePage() {
     const [active,setActive] =useState(1);
   return (
@@ -20,4 +20,4 @@ function ProfilePage() {
   )
 }
 
-export default ProfilePage
+export default isAuth(ProfilePage);
