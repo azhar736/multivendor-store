@@ -10,10 +10,12 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import DropDown from "./Header/DropDown";
 import Navbar from "./Header/Navbar";
 import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
+import { BiMenuAltLeft } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import { useSelector } from "react-redux";
 import Cart from "./Header/Cart";
 import WishList from "./Header/WishList";
+import { RxCross1 } from "react-icons/rx";
 const Backend_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 function Header({ activeHeading }) {
   const { isAuthenticated, user, loading } = useSelector((state) => state.user);
@@ -23,6 +25,7 @@ function Header({ activeHeading }) {
   const [dropDown, setDropDown] = useState(false);
   const [openCart, setOpenCart] = useState(false);
   const [wishList, setWishList] = useState(false);
+  const [open, setOpen] = useState(false);
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTem(term);
@@ -149,8 +152,9 @@ function Header({ activeHeading }) {
           </div>
           <div className="flex">
             <div className={`${styles.noramlFlex}`}>
-              <div className="relative cursor-pointer mr-[15px]"
-              onClick={()=>setWishList(true)}
+              <div
+                className="relative cursor-pointer mr-[15px]"
+                onClick={() => setWishList(true)}
               >
                 <AiOutlineHeart size={30} color="rgba(255,255,255)" />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white text-[12px] leading-tight text-center">
@@ -160,8 +164,10 @@ function Header({ activeHeading }) {
             </div>
             <div className={`${styles.noramlFlex}`}>
               <div className="relative cursor-pointer mr-[15px]">
-                <AiOutlineShoppingCart size={30} color="rgba(255,255,255)"
-                onClick={()=>setOpenCart(true)}
+                <AiOutlineShoppingCart
+                  size={30}
+                  color="rgba(255,255,255)"
+                  onClick={() => setOpenCart(true)}
                 />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white text-[12px] leading-tight text-center">
                   1
@@ -188,11 +194,73 @@ function Header({ activeHeading }) {
             <div>
               {/* Card POP UP */}
               {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
-                 {/* WishList POP UP */}
+              {/* WishList POP UP */}
               {wishList ? <WishList setWishList={setWishList} /> : null}
             </div>
           </div>
         </div>
+      </div>
+      {/*Mobile Header*/}
+      <div className="w-full h-[60px] fixed top-0 left-0 right-0 z-10 bg-white shadow-sm 800px:hidden">
+        <div className="flex items-center justify-between">
+          <div>
+            <BiMenuAltLeft
+              size={40}
+              className="ml-8"
+              onClick={() => setOpen(true)}
+            />
+          </div>
+          <div>
+            <Link href="/">
+              <img
+                src="https://shopo.quomodothemes.website/assets/images/logo.svg"
+                alt="logo"
+                className="mt-3 cursor-pointer"
+              />
+            </Link>
+          </div>
+          <div>
+            <div className="relative mr-[20px]">
+           <AiOutlineShoppingCart size={30} />
+           <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white text-[12px] leading-tight text-center">
+                  1
+                </span>
+            </div>
+          </div>
+        </div>
+        {/* Header Side bar*/}
+        {
+          open && (
+            <div className="fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0" >
+              <div className="fixed w-[60%] bg-[#fff] h-screen top-0 left-0 z-10">
+                <div className="w-full justify-between flex pr-3">
+                  <div>
+                    <div className="relative mr-[15px]">
+                      <AiOutlineHeart size={30} className="ml-3 mt-5" />
+                      <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white text-[12px] leading-tight text-center">
+                  1
+                </span>
+                    </div>
+                  </div>
+                  <RxCross1 
+                  size={25}
+                  className="ml-4 mt-5"
+                  onClick={()=> setOpen(false)}
+                  />
+                </div>
+                <div className="my-8 !w-[92%] m-auto h-[40px]">
+              <input
+              type="text"
+              placeholder="Search Product..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
+            />
+                </div>
+              </div>
+            </div>
+          )
+        }
       </div>
     </>
   );

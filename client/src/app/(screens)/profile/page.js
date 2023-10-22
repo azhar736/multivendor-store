@@ -10,8 +10,8 @@ function ProfilePage() {
   return (
     <div>
         <Header />
-        <div className={`${styles.section} flex bg-[#f5f5f5] py-10`}>
-            <div className='w-[335px]'>
+        <div className={`w-full h-auto flex bg-[#f5f5f5] py-10 pl-3 sm:${styles.section}`}>
+            <div className='w-[50px] 800px:w-[335px] sticky mt-[50%] sm:mt-[35%] 800px:mt-0'>
                 <ProfileSidebar active={active} setActive={setActive} />
             </div>
             <ProfileContent active={active} setActive={setActive} />

@@ -38,7 +38,7 @@ function ProfileSidebar({ active, setActive }) {
         <span
           className={`pl-3 ${
             active === 1 ? "text-[red] font-Poppins font-medium" : " "
-          }`}
+          } hidden 800px:block `}
         >
           Profile
         </span>
@@ -51,7 +51,7 @@ function ProfileSidebar({ active, setActive }) {
         <span
           className={`pl-3 ${
             active === 2 ? "text-[red] font-Poppins font-medium" : " "
-          }`}
+          } hidden 800px:block`}
         >
           Orders
         </span>
@@ -64,7 +64,7 @@ function ProfileSidebar({ active, setActive }) {
         <span
           className={`pl-3 ${
             active === 3 ? "text-[red] font-Poppins font-medium" : " "
-          }`}
+          } hidden 800px:block`}
         >
           Refunds
         </span>
@@ -77,7 +77,7 @@ function ProfileSidebar({ active, setActive }) {
         <span
           className={`pl-3 ${
             active === 4 ? "text-[red] font-Poppins font-medium" : " "
-          }`}
+          } hidden 800px:block`}
         >
           Inbox
         </span>
@@ -90,7 +90,7 @@ function ProfileSidebar({ active, setActive }) {
         <span
           className={`pl-3 ${
             active === 5 ? "text-[red] font-Poppins font-medium" : " "
-          }`}
+          } hidden 800px:block`}
         >
           Track Order
         </span>
@@ -103,7 +103,7 @@ function ProfileSidebar({ active, setActive }) {
         <span
           className={`pl-3 ${
             active === 6 ? "text-[red] font-Poppins font-medium" : " "
-          }`}
+          } hidden 800px:block`}
         >
           Payment Methods
         </span>
@@ -116,7 +116,7 @@ function ProfileSidebar({ active, setActive }) {
         <span
           className={`pl-3 ${
             active === 7 ? "text-[red] font-Poppins font-medium" : " "
-          }`}
+          } hidden 800px:block`}
         >
           Address
         </span>
@@ -129,7 +129,7 @@ function ProfileSidebar({ active, setActive }) {
         <span
           className={`pl-3 ${
             active === 8 ? "text-[red] font-Poppins font-medium" : " "
-          }`}
+          } hidden 800px:block`}
         >
           Logout
         </span>
