@@ -17,6 +17,12 @@ import Cart from "./Header/Cart";
 import WishList from "./Header/WishList";
 import { RxCross1 } from "react-icons/rx";
 const Backend_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { loadUser } from "@/app/redux/actions/user";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+const Base_URL = process.env.NEXT_PUBLIC_API_URL;
 function Header({ activeHeading }) {
   const { isAuthenticated, user, loading } = useSelector((state) => state.user);
   const [searchTerm, setSearchTem] = useState("");
@@ -26,6 +32,9 @@ function Header({ activeHeading }) {
   const [openCart, setOpenCart] = useState(false);
   const [wishList, setWishList] = useState(false);
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTem(term);
@@ -51,6 +60,17 @@ function Header({ activeHeading }) {
       }
     }
   };
+
+  const handleLogout=()=>{
+    axios.get(`${Base_URL}/user/logout`,{withCredentials:true}).then((res)=>{
+     toast.success(res?.data?.message);
+     router.replace("/login");
+     dispatch(loadUser());
+    //  window.location.reload(true);
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
 
   console.log("user", user);
   return (
@@ -201,7 +221,11 @@ function Header({ activeHeading }) {
         </div>
       </div>
       {/*Mobile Header*/}
-      <div className="w-full h-[60px] fixed top-0 left-0 right-0 z-10 bg-white shadow-sm 800px:hidden">
+      <div
+        className={`${
+          isActive === true ? "shadow-sm fixed top-0 left-0 z-10" : null
+        } w-full h-[60px] z-10 bg-white shadow-sm 800px:hidden`}
+      >
         <div className="flex items-center justify-between">
           <div>
             <BiMenuAltLeft
@@ -221,46 +245,95 @@ function Header({ activeHeading }) {
           </div>
           <div>
             <div className="relative mr-[20px]">
-           <AiOutlineShoppingCart size={30} />
-           <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white text-[12px] leading-tight text-center">
-                  1
-                </span>
+              <AiOutlineShoppingCart size={30} />
+              <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white text-[12px] leading-tight text-center">
+                1
+              </span>
             </div>
           </div>
         </div>
         {/* Header Side bar*/}
-        {
-          open && (
-            <div className="fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0" >
-              <div className="fixed w-[60%] bg-[#fff] h-screen top-0 left-0 z-10">
-                <div className="w-full justify-between flex pr-3">
-                  <div>
-                    <div className="relative mr-[15px]">
-                      <AiOutlineHeart size={30} className="ml-3 mt-5" />
-                      <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white text-[12px] leading-tight text-center">
-                  1
-                </span>
-                    </div>
+        {open && (
+          <div className="fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0">
+            <div className="fixed w-[60%] bg-[#fff] h-screen top-0 left-0 z-10">
+              <div className="w-full justify-between flex pr-3">
+                <div>
+                  <div className="relative mr-[15px]">
+                    <AiOutlineHeart size={30} className="ml-3 mt-5" />
+                    <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white text-[12px] leading-tight text-center">
+                      1
+                    </span>
                   </div>
-                  <RxCross1 
+                </div>
+                <RxCross1
                   size={25}
                   className="ml-4 mt-5"
-                  onClick={()=> setOpen(false)}
-                  />
-                </div>
-                <div className="my-8 !w-[92%] m-auto h-[40px]">
-              <input
-              type="text"
-              placeholder="Search Product..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
-            />
-                </div>
+                  onClick={() => setOpen(false)}
+                />
+              </div>
+              <div className="my-8 !w-[92%] m-auto h-[40px] relative">
+                <input
+                  type="text"
+                  placeholder="Search Product..."
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
+                />
+                {searchData && searchData.length !== 0 ? (
+                  <div className="absolute left-0 h-[90vh] min-h-[30vh] bg-white !overflow-y-scroll shadow-sm-2 z-30 p-4">
+                    {searchData &&
+                      searchData.map((i, index) => {
+                        const d = i.name;
+                        const Product_name = d.replace(/\s+/g, "-");
+                        return (
+                          <Link key={index} href={`/product/${Product_name}`}>
+                            <div className="w-full flex items-start py-3">
+                              <img
+                                src={i.image_Url[0].url}
+                                alt=""
+                                className="h-[40px] w-[40px] mr-[10px]"
+                              />
+                              <h1>{i.name}</h1>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                  </div>
+                ) : null}
+              </div>
+              <Navbar active={activeHeading} />
+              <div className={`${styles.button} ml-4 !rounded-[4px]`}>
+                <Link href="/seller">
+                  <h1 className="text-[#fff] flex items-center">
+                    Become Seller
+                    <MdOutlineArrowForwardIos className="ml-1" />
+                  </h1>
+                </Link>
+              </div>
+              <br />
+              <br />
+              <br />
+              <div className="flex w-full items-center justify-center mb-2">
+                {isAuthenticated ? (
+                  <>
+                     <button onClick={handleLogout} className="text-[18px] pr-[10px] text-[#000000b7]">
+                      Logout
+                    </button>
+                  </>
+                ):(
+                  <>
+                    <button onClick={()=>router.push("/login")} className="text-[18px] pr-[10px] text-[#000000b7]">
+                      Login /
+                    </button>
+                    <button onClick={()=>router.push("/signup")} className="text-[18px] text-[#000000b7]">
+                      Sing up
+                    </button>
+                  </>
+                )}
               </div>
             </div>
-          )
-        }
+          </div>
+        )}
       </div>
     </>
   );

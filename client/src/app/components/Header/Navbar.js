@@ -6,7 +6,7 @@ import React from "react";
 
 function Navbar({ active }) {
   return (
-    <div className={`${styles.noramlFlex}`}>
+    <div className={`block 800px:${styles.noramlFlex}`}>
       {navItems &&
         navItems.map((item, index) => (
           <div
@@ -16,8 +16,8 @@ function Navbar({ active }) {
               href={item.url}
               className={`${
                 active === index + 1
-                  ? "text-[#17dd1f] font-[500]"
-                  : "text-[#fff] font-[500] px-6 cursor-pointer"
+                  ? "text-[#17dd1f] font-[500] px-6 cursor-pointer"
+                  : "text-black 800px:text-[#fff] font-[500] px-6 cursor-pointer !py-4"
               }`}
             >
               {item.title}

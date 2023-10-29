@@ -4,7 +4,7 @@ import { RxCross1 } from 'react-icons/rx'
 import {IoBagHandleOutline} from "react-icons/io5"
 import {HiOutlineMinus, HiPlus} from "react-icons/hi"
 import Link from 'next/link'
- 
+import isAuth from '@/app/components/Auth/isAuth';
 function Cart({setOpenCart}) {
     const cartData=[
         {
@@ -101,4 +101,4 @@ const CartSingle=({data})=>{
         </div>
     )
 }
-export default Cart
+export default isAuth(Cart);
