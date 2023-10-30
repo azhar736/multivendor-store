@@ -1,11 +1,12 @@
+import ShopCreate from "@/app/components/Shop/ShopCreate";
 import React from "react";
 
-function ShopCreate() {
+function ShopCreatePage() {
   return (
     <div>
-      <h3>ShopCreate Page</h3>
+     <ShopCreate />
     </div>
   );
 }
 
-export default ShopCreate;
+export default ShopCreatePage;

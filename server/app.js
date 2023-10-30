@@ -30,11 +30,14 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
 //Import Routes
 const user = require("./controller/user");
+const shop = require("./controller/shop");
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Home Route");
 });
+
 app.use("/api/v2/user", user);
+app.use("/api/v2/shop", shop);
 
 //It's Error handling
 app.use(ErrorHandler);
