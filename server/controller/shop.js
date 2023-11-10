@@ -9,7 +9,7 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const sendMail = require("../utils/sendMail");
 const sendToken = require("../utils/jwtToken");
 const catchAsyncError = require("../middleware/catchAsyncError");
-const { isAuthenticated } = require("../middleware/auth");
+const { isAuthenticated, isSelller } = require("../middleware/auth");
 const shop = require("../model/shop");
 const sendShopToken = require("../utils/shopToken");
 //Create Shop
@@ -135,15 +135,16 @@ router.post(
 //Load Shop
 router.get(
   "/getseller",
-  isAuthenticated,
+  isSelller,
   catchAsyncError(async (req, res, next) => {
     try {
-      const user = await User.findById(req.user.id);
-      if (!user) {
-        return next(new ErrorHandler("User not found!", 400));
+      const seller = await shop.findById(req.seller._id);
+      if (!seller) {
+        return next(new ErrorHandler("Seller not found!", 400));
       }
-      res.status(200).json({ success: true, user });
+      res.status(200).json({ success: true, seller });
     } catch (error) {
+      console.log("error",error);
       return next(new ErrorHandler(error.message, 500));
     }
   })

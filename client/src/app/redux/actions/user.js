@@ -36,7 +36,7 @@ export const loadSeller = () => async (dispatch) => {
       withCredentials: true,
     });
     console.log('loadUser action: data received', data);
-    dispatch(loadSellerSuccess(data.user));
+    dispatch(loadSellerSuccess(data.seller));
   } catch (error) {
     // console.log("The Error in redux catch:", error.response.data);
     dispatch(loadSellerFail(error.response.data.message));

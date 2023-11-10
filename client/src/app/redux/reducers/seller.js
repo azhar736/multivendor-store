@@ -7,22 +7,22 @@ import {
 } from "../actions/user";
 
 const initialState = {
-  isAuthenticated: false,
+  isSeller: false,
 };
 
 export const sellerReducer = createReducer(initialState, {
   [loadSellerRequest]: (state) => {
-    state.loading = true;
+    state.isLoading = true;
   },
   [loadSellerSuccess]: (state, action) => {
     console.log("userReducer: loadUserSuccess action received", action);
-    state.isAuthenticated = true;
-    state.loading = false;
-    state.user = action.payload;
+    state.isSeller = true;
+    state.isLoading = false;
+    state.seller = action.payload;
   },
   [loadSellerFail]: (state, action) => {
-    state.isAuthenticated = false;
-    state.loading = false;
+    state.isSeller = false;
+    state.isLoading = false;
     state.error = action.payload;
   },
   [clearError]: (state, action) => {

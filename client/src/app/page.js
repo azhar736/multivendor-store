@@ -15,6 +15,7 @@ export default function Home() {
   const [shouldRender, setShouldRender] = useState(false);
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.user);
+  const { isSeller,seller,isLoading } = useSelector((state) => state.seller);
   const loading = useSelector((state) => state.user.loading);
   const router = useRouter();
   useLayoutEffect(() => {
@@ -24,15 +25,19 @@ export default function Home() {
       "The Value of IS Authenicated is on HOme Page",
       isAuthenticated
     );
-    if (isAuthenticated === false) {
-      router.replace("/login");
-    } else {
-      setShouldRender(true);
-    }
+    // if (isAuthenticated === false) {
+    //   router.replace("/login");
+    // } else {
+    //   setShouldRender(true);
+    // }
+    // if(isSeller){
+      // router.push(`/shop/${seller._id}`)
+    // }
   }, []);
-
+  console.log("Is Seller is",isSeller);
+  console.log("Seller",seller);
   console.log("Loader User State===", loading);
-  if (loading) return <>Loading</>;
+  if (loading || isLoading) return <>Loading</>;
   if (!shouldRender) return null;
   return (
     <>
