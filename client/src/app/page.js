@@ -1,7 +1,7 @@
 "use client";
 import {useState, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loadUser } from "./redux/actions/user";
+import { loadSeller, loadUser } from "./redux/actions/user";
 import Header from "./components/Header";
 import Hero from "./components/Home/Hero";
 import Categories from "./components/Home/Categories";
@@ -19,6 +19,7 @@ export default function Home() {
   const router = useRouter();
   useLayoutEffect(() => {
     dispatch(loadUser());
+    dispatch(loadSeller());
     console.log(
       "The Value of IS Authenicated is on HOme Page",
       isAuthenticated

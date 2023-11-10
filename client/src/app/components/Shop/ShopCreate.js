@@ -14,7 +14,7 @@ import { RxAvatar } from "react-icons/rx";
 function ShopCreate() {
   const [email, setEmail] = useState("");
   const [name, setName] =useState("");
-  const [phoneNumber,setPhoneNumber] = useState();
+  const [phoneNumber,setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [zipCode, setZipCode] = useState();
   const [avatar, setAvatar] = useState();

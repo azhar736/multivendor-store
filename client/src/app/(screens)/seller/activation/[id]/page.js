@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 const Base_URL = process.env.NEXT_PUBLIC_API_URL;
-const ActivationPage = ({ params }) => {
+const SellerActivationPage = ({ params }) => {
   const activation_token = params.id;
   const [error, setError] = useState(false);
   useEffect(() => {
@@ -11,7 +11,7 @@ const ActivationPage = ({ params }) => {
       const activateEmail = async () => {
         try {
           console.log("The Token for activation", activation_token);
-          const response = await axios.post(`${Base_URL}/user/activation`, {
+          const response = await axios.post(`${Base_URL}/shop/activation`, {
             activation_token,
           });
           console.log(response);
@@ -35,4 +35,4 @@ const ActivationPage = ({ params }) => {
   );
 };
 
-export default ActivationPage;
+export default SellerActivationPage;

@@ -11,7 +11,8 @@ const sendToken = require("../utils/jwtToken");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const { isAuthenticated } = require("../middleware/auth");
 const shop = require("../model/shop");
-
+const sendShopToken = require("../utils/shopToken");
+//Create Shop
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -70,7 +71,7 @@ const createActivationToken = (user) => {
 
   //activate Seller
 router.post(
-    "/shop/activation",
+    "/activation",
     catchAsyncError(async (req, res, next) => {
       try {
         const { activation_token } = req.body;
@@ -78,7 +79,7 @@ router.post(
           activation_token,
           process.env.ACTIVATION_SECRET
         );
-        if (!newUser) {
+        if (!newSeller) {
           return next(new ErrorHandler("Invalid Token", 400));
         }
         const { name, email, password, avatar,address,zipCode,phoneNumber } = newSeller;
@@ -95,12 +96,59 @@ router.post(
           zipCode,
           phoneNumber
         });
-        sendToken(seller, 201, res);
+        sendShopToken(seller, 201, res);
       } catch (error) {
         return next(new ErrorHandler(error.message, 500));
       }
     })
   );
+
+//Shop Login
+router.post(
+  "/login-shop",
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
+      // console.log(email, password);
+      if (!email || !password) {
+        return next(new ErrorHandler("Please Provide all the fields!", 400));
+      }
+      const user = await shop.findOne({ email }).select("+password");
+      if (!user) {
+        return next(new ErrorHandler("User not found!", 400));
+      }
+      const isValidPassword = await user.comparePassword(password);
+      if (!isValidPassword) {
+        return next(
+          new ErrorHandler("Please provide a valid information!", 400)
+        );
+      }
+      sendShopToken(user, 201, res);
+    } catch (error) {
+      console.log(error);
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+
+//Load Shop
+router.get(
+  "/getseller",
+  isAuthenticated,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.user.id);
+      if (!user) {
+        return next(new ErrorHandler("User not found!", 400));
+      }
+      res.status(200).json({ success: true, user });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
   
 
 module.exports = router;
