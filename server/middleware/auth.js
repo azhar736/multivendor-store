@@ -23,6 +23,7 @@ exports.isSelller = catchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler("Please Login to Continue..", 401));
   }
   const decoded = jwt.verify(seller_token, process.env.JWT_SECRET_KEY);
+  console.log("decoded: ", decoded);
   req.seller = await Shop.findById(decoded.id);
   next();
 });

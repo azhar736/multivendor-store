@@ -25,13 +25,13 @@ export default function Home() {
       "The Value of IS Authenicated is on HOme Page",
       isAuthenticated
     );
-    // if (isAuthenticated === false) {
-    //   router.replace("/login");
-    // } else {
-    //   setShouldRender(true);
-    // }
+    if (isAuthenticated === false) {
+      router.replace("/login");
+    } else {
+      setShouldRender(true);
+    }
     // if(isSeller){
-      // router.push(`/shop/${seller._id}`)
+    //   router.push(`/shop/${seller._id}`)
     // }
   }, []);
   console.log("Is Seller is",isSeller);

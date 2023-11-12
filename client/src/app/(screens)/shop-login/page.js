@@ -19,16 +19,23 @@ function ShopLogin() {
   const dispatch = useDispatch();
   const router = useRouter();
     const {isAuthenticated} = useSelector((state)=>state.user);
+    const {isSeller} = useSelector((state)=>state.seller);
     const loading = useSelector((state) => state.user.loading);
-  // useLayoutEffect(() => {
-  //   setVisible(false); // ensure initial client-side state matches server-side state
-  //   console.log("The value is Authenticated is on Login Page",isAuthenticated);
-  //   if(isAuthenticated === true){
-  //     router.replace("/");
-  //   }else{
-  //     setShouldRender(true);
-  //   }
-  // }, []);
+  useLayoutEffect(() => {
+    // setVisible(false); // ensure initial client-side state matches server-side state
+    // console.log("The value is Authenticated is on Login Page",isAuthenticated);
+    // if(isAuthenticated === true){
+    //   router.replace("/");
+    // }else{
+    //   setShouldRender(true);
+    // }
+    if(isSeller === true){
+      router.push("/dashboard");
+    }
+    else {
+      setShouldRender(true);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,6 +54,7 @@ function ShopLogin() {
         // router.push("/");
         makeToast("Login successful!", "success");
         dispatch(loadUser());
+        router.replace("/dashboard");
         setEmail("");
         setPassword("");
         // window.location.reload(true);
@@ -58,7 +66,7 @@ function ShopLogin() {
   };
   console.log("Loader User State===",loading);
   if(loading) return <>Loading</>;
-  // if (!shouldRender) return null;
+  if (!shouldRender) return null;
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
