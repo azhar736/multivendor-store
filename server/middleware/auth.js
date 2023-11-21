@@ -20,7 +20,7 @@ exports.isSelller = catchAsyncError(async (req, res, next) => {
   const {seller_token} = req.cookies;
   //   console.log("the Token is: " + token);
   if (!seller_token) {
-    return next(new ErrorHandler("Please Login to Continue..", 401));
+    return next(new ErrorHandler("Please Login as a Seller to Continue..", 401));
   }
   const decoded = jwt.verify(seller_token, process.env.JWT_SECRET_KEY);
   console.log("decoded: ", decoded);
